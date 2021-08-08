@@ -3,53 +3,6 @@
 #include <complex.h>
 
 static int
-rotate_plane(struct notcurses* nc, struct ncplane* n){
-  struct timespec scaled;
-  timespec_div(&demodelay, 2, &scaled);
-  // we can't rotate a plane unless it has an even number of columns :/
-  int nx;
-  if((nx = ncplane_dim_x(n)) % 2){
-    if(ncplane_resize_simple(n, ncplane_dim_y(n), --nx)){
-      return -1;
-    }
-  }
-  for(int i = 0 ; i < 16 ; ++i){
-    demo_nanosleep(nc, &scaled);
-    int centy, centx;
-    ncplane_center_abs(n, &centy, &centx);
-    if(ncplane_rotate_cw(n)){
-      return -1;
-    }
-    int cent2y, cent2x;
-    int absy, absx;
-    ncplane_center_abs(n, &cent2y, &cent2x);
-    ncplane_yx(n, &absy, &absx);
-    ncplane_move_yx(n, absy + centy - cent2y, absx + centx - cent2x);
-    DEMO_RENDER(nc);
-    timespec_mul(&scaled, 2, &scaled);
-    timespec_div(&scaled, 3, &scaled);
-  }
-  timespec_div(&demodelay, 2, &scaled);
-  for(int i = 0 ; i < 16 ; ++i){
-    demo_nanosleep(nc, &scaled);
-    int centy, centx;
-    ncplane_center_abs(n, &centy, &centx);
-    if(ncplane_rotate_ccw(n)){
-      return -1;
-    }
-    int cent2y, cent2x;
-    int absy, absx;
-    ncplane_center_abs(n, &cent2y, &cent2x);
-    ncplane_yx(n, &absy, &absx);
-    ncplane_move_yx(n, absy + centy - cent2y, absx + centx - cent2x);
-    DEMO_RENDER(nc);
-    timespec_mul(&scaled, 2, &scaled);
-    timespec_div(&scaled, 3, &scaled);
-  }
-  return 0;
-}
-
-static int
 rotate_visual(struct notcurses* nc, struct ncplane* n, int dy, int dx){
   struct timespec scaled;
   int r = 0;
@@ -212,13 +165,6 @@ int normal_demo(struct notcurses* nc){
   n = ncplane_dup(nstd, NULL);
   if(n == NULL){
     goto err;
-  }
-  if(notcurses_canutf8(nc)){
-    ncplane_erase(nstd);
-    ncplane_home(n);
-    if( (r = rotate_plane(nc, n)) ){
-      goto err;
-    }
   }
   ncplane_home(n);
   uint64_t tl, tr, bl, br;
