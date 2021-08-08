@@ -1573,15 +1573,6 @@ API int ncplane_move_below(struct ncplane* RESTRICT n,
 API struct ncplane* ncplane_below(struct ncplane* n);
 API struct ncplane* ncplane_above(struct ncplane* n);
 
-// Rotate the plane π/2 radians clockwise or counterclockwise. This cannot
-// be performed on arbitrary planes, because glyphs cannot be arbitrarily
-// rotated. The glyphs which can be rotated are limited: line-drawing
-// characters, spaces, half blocks, and full blocks. The plane must have
-// an even number of columns. Use the ncvisual rotation for a more
-// flexible approach.
-API int ncplane_rotate_cw(struct ncplane* n);
-API int ncplane_rotate_ccw(struct ncplane* n);
-
 // Retrieve the current contents of the cell under the cursor. The EGC is
 // returned, or NULL on error. This EGC must be free()d by the caller. The
 // stylemask and channels are written to 'stylemask' and 'channels', respectively.
@@ -4435,6 +4426,9 @@ __attribute__ ((deprecated)) API int nccell_width(const struct ncplane* n, const
 
 API ALLOC char* ncvisual_subtitle(const struct ncvisual* ncv)
   __attribute__ ((nonnull (1))) __attribute__ ((deprecated));
+
+API int ncplane_rotate_cw(struct ncplane* n) __attribute__ ((deprecated));
+API int ncplane_rotate_ccw(struct ncplane* n) __attribute__ ((deprecated));
 
 #define CELL_ALPHA_HIGHCONTRAST NCALPHA_HIGHCONTRAST
 #define CELL_ALPHA_TRANSPARENT  NCALPHA_TRANSPARENT

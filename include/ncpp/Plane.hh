@@ -1181,16 +1181,6 @@ namespace ncpp
 			return error_guard<bool, bool> (ncplane_translate_abs (plane, y, x), false);
 		}
 
-		bool rotate_cw () const NOEXCEPT_MAYBE
-		{
-			return error_guard (ncplane_rotate_cw (plane), -1);
-		}
-
-		bool rotate_ccw () const noexcept
-		{
-			return error_guard (ncplane_rotate_ccw (plane), -1);
-		}
-
 		char* strdup (Cell const& cell) const noexcept
 		{
 			return nccell_strdup (plane, cell);
